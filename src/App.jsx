@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import ReactHtmlParser from 'react-html-parser';
 function App() {
   const [profileDetails, setProfileDetails] = useState({
     fullname: '',
@@ -9,6 +9,7 @@ function App() {
     about: '',
   });
   const [url, setUrl] = useState('');
+  const [html, setHtml] = useState('');
 
   useEffect(() => {
     window.chrome?.tabs &&
@@ -45,11 +46,25 @@ function App() {
                     ? 'Not Available'
                     : response?.about,
               });
+              setHtml(
+                response === null || response === undefined
+                  ? 'Not Available'
+                  : response?.experience
+              );
             }
           );
         }
       );
   }, [url]);
+
+  const options = {
+    replace: (domNode) => {
+      if (domNode.attribs && domNode.attribs.class === 'remove') {
+        return <></>;
+      }
+    },
+  };
+  let htmlDoc = `${html}`;
 
   return (
     <>
@@ -103,6 +118,12 @@ function App() {
             <div className="mt-3 text-white text-sm">
               <span className="text-gray-400 font-semibold">
                 {profileDetails?.about}
+              </span>
+            </div>
+            <div className="mt-3 text-white text-sm">
+              Experience Section
+              <span className="text-gray-400 font-semibold">
+                {ReactHtmlParser(htmlDoc, options)}
               </span>
             </div>
           </section>

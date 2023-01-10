@@ -1,6 +1,7 @@
 const messagesFromReactAppListener = (msg, sender, sendResponse) => {
   var _a, _b, _c;
   console.log('[content.js]. Message received', msg);
+
   const response = {
     fullname:
       ((_a =
@@ -35,6 +36,11 @@ const messagesFromReactAppListener = (msg, sender, sendResponse) => {
         .querySelector('#about')
         .parentElement.querySelectorAll('span.visually-hidden ')[1]
         .textContent || '',
+
+    experience: document
+      .querySelector('#experience')
+      .parentElement.querySelector(' div.pvs-list__outer-container > ul')
+      .innerHTML,
   };
   console.log('[content.js]. Message response', response);
   sendResponse(response);
