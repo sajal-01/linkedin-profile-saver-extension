@@ -1,5 +1,5 @@
 {
-  "name": "Chrome React SEO Extension",
+  "name": "linkedin Profile Saver",
   "description": "The power of React and TypeScript for building interactive Chrome extensions",
   "version": "1.0",
   "manifest_version": 3,
@@ -13,9 +13,7 @@
       "js": ["./static/js/content.js"]
     }
   ],
-  "permissions": [
-    "activeTab"
-  ],
+  "permissions": ["activeTab"],
   "icons": {
     "16": "logo192.png",
     "48": "logo192.png",
