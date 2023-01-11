@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import defaultImg from './assets/defaultProfile.jpg';
+import sanitizeHtml from 'sanitize-html';
 function App() {
   const [profileDetails, setProfileDetails] = useState({
     fullname: '',
@@ -9,7 +10,8 @@ function App() {
     about: '',
   });
   const [url, setUrl] = useState('');
-  const [html, setHtml] = useState('');
+  const [htmlExp, setHtmlExp] = useState('');
+  const [htmlVol, setHtmlVol] = useState('');
 
   useEffect(() => {
     window.chrome?.tabs &&
@@ -46,10 +48,15 @@ function App() {
                     ? 'Not Available'
                     : response?.about,
               });
-              setHtml(
+              setHtmlExp(
                 response === null || response === undefined
                   ? 'Not Available'
                   : response?.experience
+              );
+              setHtmlVol(
+                response === null || response === undefined
+                  ? 'Not Available'
+                  : response?.volunteering
               );
             }
           );
@@ -57,82 +64,288 @@ function App() {
       );
   }, [url]);
 
-  const options = {
-    replace: (domNode) => {
-      if (domNode.attribs && domNode.attribs.class === 'remove') {
-        return <></>;
-      }
+  let cleanHTMLExp = sanitizeHtml(htmlExp, {
+    allowedTags: [
+      'address',
+      'article',
+      'aside',
+      'footer',
+      'header',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'hgroup',
+      'main',
+      'nav',
+      'section',
+      'blockquote',
+      'dd',
+      'div',
+      'dl',
+      'dt',
+      'figcaption',
+      'figure',
+      'hr',
+      'li',
+      'main',
+      'ol',
+      'p',
+      'pre',
+      'ul',
+      'a',
+      'abbr',
+      'b',
+      'bdi',
+      'bdo',
+      'br',
+      'cite',
+      'code',
+      'data',
+      'dfn',
+      'em',
+      'i',
+      'kbd',
+      'mark',
+      'q',
+      'rb',
+      'rp',
+      'rt',
+      'rtc',
+      'ruby',
+      's',
+      'samp',
+      'small',
+      'span',
+      'strong',
+      'sub',
+      'sup',
+      'time',
+      'u',
+      'var',
+      'wbr',
+      'caption',
+      'col',
+      'colgroup',
+      'table',
+      'tbody',
+      'td',
+      'tfoot',
+      'th',
+      'thead',
+      'tr',
+    ],
+    allowedAttributes: {
+      a: ['href', 'name', 'target'],
+      img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
     },
-  };
-  let htmlDoc = `${html}`;
+    selfClosing: [
+      'img',
+      'br',
+      'hr',
+      'area',
+      'base',
+      'basefont',
+      'input',
+      'link',
+      'meta',
+    ],
+    // URL schemes we permit
+    allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
+    allowedSchemesByTag: {},
+    allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+    allowProtocolRelative: true,
+    enforceHtmlBoundary: false,
+  });
+  let cleanHTMLVol = sanitizeHtml(htmlVol, {
+    allowedTags: [
+      'address',
+      'article',
+      'aside',
+      'footer',
+      'header',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'hgroup',
+      'main',
+      'nav',
+      'section',
+      'blockquote',
+      'dd',
+      'div',
+      'dl',
+      'dt',
+      'figcaption',
+      'figure',
+      'hr',
+      'li',
+      'main',
+      'ol',
+      'p',
+      'pre',
+      'ul',
+      'a',
+      'abbr',
+      'b',
+      'bdi',
+      'bdo',
+      'br',
+      'cite',
+      'code',
+      'data',
+      'dfn',
+      'em',
+      'i',
+      'kbd',
+      'mark',
+      'q',
+      'rb',
+      'rp',
+      'rt',
+      'rtc',
+      'ruby',
+      's',
+      'samp',
+      'small',
+      'span',
+      'strong',
+      'sub',
+      'sup',
+      'time',
+      'u',
+      'var',
+      'wbr',
+      'caption',
+      'col',
+      'colgroup',
+      'table',
+      'tbody',
+      'td',
+      'tfoot',
+      'th',
+      'thead',
+      'tr',
+    ],
+    allowedAttributes: {
+      a: ['href', 'name', 'target'],
+      img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
+    },
+    selfClosing: [
+      'img',
+      'br',
+      'hr',
+      'area',
+      'base',
+      'basefont',
+      'input',
+      'link',
+      'meta',
+    ],
+    // URL schemes we permit
+    allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
+    allowedSchemesByTag: {},
+    allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+    allowProtocolRelative: true,
+    enforceHtmlBoundary: false,
+  });
 
   return (
     <>
-      {profileDetails ? (
-        <section className=" bg-[#071e34] flex font-medium items-center justify-center h-screen">
-          <section className="w-64 mx-auto bg-[#20354b] rounded-2xl px-8 py-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">
-                {profileDetails?.fullname}'s profile
-              </span>
-              <span className="text-emerald-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                  />
-                </svg>
-              </span>
-            </div>
-            <div className="mt-6 w-fit mx-auto">
+      <section className="pt-16 bg-gray-300 w-96">
+        <div className="text-[#0A66C2] font-semibold text-center text-xl">
+          LinkedIn Profile Saver
+        </div>
+        <div className="flex  justify-between items-center px-10  py-4">
+          <button class="px-5 py-2.5 relative rounded group  text-white font-medium inline-block">
+            <span class="absolute top-0 left-0 w-full h-full rounded opacity-50 filter blur-sm bg-gradient-to-br from-purple-600 to-blue-500"></span>
+            <span class="h-full w-full inset-0 absolute mt-0.5 ml-0.5 bg-gradient-to-br filter group-active:opacity-0 rounded opacity-50 from-purple-600 to-blue-500"></span>
+            <span class="absolute inset-0 w-full h-full transition-all duration-200 ease-out rounded shadow-xl bg-gradient-to-br filter group-active:opacity-0 group-hover:blur-sm from-purple-600 to-blue-500"></span>
+            <span class="absolute inset-0 w-full h-full transition duration-200 ease-out rounded bg-gradient-to-br to-purple-600 from-blue-500"></span>
+            <span class="relative">Save Profile ⚡</span>
+          </button>
+          <button class="px-5 py-2.5 relative rounded group  text-white font-medium inline-block">
+            <span class="absolute top-0 left-0 w-full h-full rounded opacity-50 filter blur-sm bg-gradient-to-br from-purple-600 to-blue-500"></span>
+            <span class="h-full w-full inset-0 absolute mt-0.5 ml-0.5 bg-gradient-to-br filter group-active:opacity-0 rounded opacity-50 from-purple-600 to-blue-500"></span>
+            <span class="absolute inset-0 w-full h-full transition-all duration-200 ease-out rounded shadow-xl bg-gradient-to-br filter group-active:opacity-0 group-hover:blur-sm from-purple-600 to-blue-500"></span>
+            <span class="absolute inset-0 w-full h-full transition duration-200 ease-out rounded bg-gradient-to-br to-purple-600 from-blue-500"></span>
+            <span class="relative">Dashboard 🎯</span>
+          </button>
+        </div>
+
+        <div className="relative flex flex-col  break-words  w-full mb-6 shadow-xl rounded-lg mt-16">
+          <div className="px-6">
+            <div className="w-full px-4 flex justify-center items-center">
               <img
-                src={profileDetails?.photo}
-                className="rounded-full w-28 "
-                alt="profilepicture"
+                alt={profileDetails?.fullname}
+                src={profileDetails?.photo || defaultImg}
+                className="shadow-xl rounded-full h-auto align-middle border-none  max-w-150-px"
               />
             </div>
+            <div className="text-center mt-12">
+              <h3 className="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">
+                {profileDetails?.fullname || 'Name Not Available'}
+              </h3>
+              <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+                <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
+                {profileDetails?.location || 'Location Not Available'}
+              </div>
+              <div className="mb-2 text-blueGray-600 mt-10">
+                <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
+                {profileDetails?.title || 'Title Not Available'}
+              </div>
+              <div className="mb-2 text-blueGray-600">
+                <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
+                {profileDetails?.about || 'About Section Not Available'}
+              </div>
+            </div>
 
-            <div className="mt-8 ">
-              <h2 className="text-white font-bold text-2xl tracking-wide">
-                {profileDetails?.fullname}
-              </h2>
+            <div className="mt-10 py-10 border-t border-blueGray-200 text-left">
+              <div className="text-center font-bold text-blueGray-700 text-xl">
+                Experience
+              </div>
+              <div className="flex flex-wrap justify-start">
+                <div className="w-full  px-4">
+                  <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                    {htmlExp ? (
+                      <div
+                        className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
+                        dangerouslySetInnerHTML={{ __html: cleanHTMLExp }}
+                      />
+                    ) : (
+                      'Experience Section Not Available'
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-blue-200 font-semibold mt-2.5">
-              {profileDetails?.title}
-            </p>
-            <p className="text-emerald-400 font-semibold mt-2.5">
-              {profileDetails?.location}
-            </p>
-
-            <div className="h-1 w-full bg-black mt-8 rounded-full">
-              <div className="h-1 rounded-full w-2/5 bg-yellow-500 "></div>
+            <div className="mt-10 py-10 border-t border-blueGray-200 text-left">
+              <div className="text-center font-bold text-blueGray-700 text-xl">
+                Volunteering
+              </div>
+              <div className="flex flex-wrap justify-start">
+                <div className="w-full  px-4">
+                  <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                    {htmlVol ? (
+                      <div
+                        className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
+                        dangerouslySetInnerHTML={{ __html: cleanHTMLVol }}
+                      />
+                    ) : (
+                      'Volunteering Section Not Available'
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="mt-3 text-white text-sm">
-              <span className="text-gray-400 font-semibold">
-                {profileDetails?.about}
-              </span>
-            </div>
-            <div className="mt-3 text-white text-sm">
-              Experience Section
-              <span className="text-gray-400 font-semibold">
-                {ReactHtmlParser(htmlDoc, options)}
-              </span>
-            </div>
-          </section>
-        </section>
-      ) : (
-        <div className="flex items-center justify-center h-screen text-xl font-bold">
-          Loading...
+          </div>
         </div>
-      )}
+      </section>
     </>
   );
 }

@@ -41,6 +41,11 @@ const messagesFromReactAppListener = (msg, sender, sendResponse) => {
       .querySelector('#experience')
       .parentElement.querySelector(' div.pvs-list__outer-container > ul')
       .innerHTML,
+
+    volunteering: document
+      .querySelector('#volunteering_experience')
+      .parentElement.querySelector('div.pvs-list__outer-container > ul')
+      .innerHTML,
   };
   console.log('[content.js]. Message response', response);
   sendResponse(response);
@@ -49,4 +54,4 @@ const messagesFromReactAppListener = (msg, sender, sendResponse) => {
  * Fired when a message is sent from either an extension process or a content script.
  */
 window.chrome.runtime.onMessage.addListener(messagesFromReactAppListener);
-export {};
+export default messagesFromReactAppListener;
