@@ -42,7 +42,7 @@ const messagesFromReactAppListener = (msg, sender, sendResponse) => {
           : document.querySelector('#about')) === null || _d === void 0
         ? void 0
         : _d.parentElement.querySelectorAll('span.visually-hidden ')[1]
-            .textContent) || '',
+            .innerHTML) || '',
     photo:
       ((_e =
         document === null || document === void 0

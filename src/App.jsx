@@ -12,6 +12,7 @@ function App() {
     volunteering: '',
   });
   const [url, setUrl] = useState('');
+
   const [htmlExp, setHtmlExp] = useState(null);
   const [htmlVol, setHtmlVol] = useState(null);
 
@@ -66,202 +67,114 @@ function App() {
       );
   }, [url]);
 
-  let cleanHTMLExp = sanitizeHtml(htmlExp, {
-    allowedTags: [
-      'address',
-      'article',
-      'aside',
-      'footer',
-      'header',
-      'h1',
-      'h2',
-      'h3',
-      'h4',
-      'h5',
-      'h6',
-      'hgroup',
-      'main',
-      'nav',
-      'section',
-      'blockquote',
-      'dd',
-      'div',
-      'dl',
-      'dt',
-      'figcaption',
-      'figure',
-      'hr',
-      'li',
-      'main',
-      'ol',
-      'p',
-      'pre',
-      'ul',
-      'a',
-      'abbr',
-      'b',
-      'bdi',
-      'bdo',
-      'br',
-      'cite',
-      'code',
-      'data',
-      'dfn',
-      'em',
-      'i',
-      'kbd',
-      'mark',
-      'q',
-      'rb',
-      'rp',
-      'rt',
-      'rtc',
-      'ruby',
-      's',
-      'samp',
-      'small',
-      'span',
-      'strong',
-      'sub',
-      'sup',
-      'time',
-      'u',
-      'var',
-      'wbr',
-      'caption',
-      'col',
-      'colgroup',
-      'table',
-      'tbody',
-      'td',
-      'tfoot',
-      'th',
-      'thead',
-      'tr',
-    ],
-    allowedAttributes: {
-      a: ['href', 'name', 'target'],
-      img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
-    },
-    selfClosing: [
-      'img',
-      'br',
-      'hr',
-      'area',
-      'base',
-      'basefont',
-      'input',
-      'link',
-      'meta',
-    ],
-    // URL schemes we permit
-    allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
-    allowedSchemesByTag: {},
-    allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
-    allowProtocolRelative: true,
-    enforceHtmlBoundary: false,
-  });
-
-  let cleanHTMLVol = sanitizeHtml(htmlVol, {
-    allowedTags: [
-      'address',
-      'article',
-      'aside',
-      'footer',
-      'header',
-      'h1',
-      'h2',
-      'h3',
-      'h4',
-      'h5',
-      'h6',
-      'hgroup',
-      'main',
-      'nav',
-      'section',
-      'blockquote',
-      'dd',
-      'div',
-      'dl',
-      'dt',
-      'figcaption',
-      'figure',
-      'hr',
-      'li',
-      'main',
-      'ol',
-      'p',
-      'pre',
-      'ul',
-      'a',
-      'abbr',
-      'b',
-      'bdi',
-      'bdo',
-      'br',
-      'cite',
-      'code',
-      'data',
-      'dfn',
-      'em',
-      'i',
-      'kbd',
-      'mark',
-      'q',
-      'rb',
-      'rp',
-      'rt',
-      'rtc',
-      'ruby',
-      's',
-      'samp',
-      'small',
-      'span',
-      'strong',
-      'sub',
-      'sup',
-      'time',
-      'u',
-      'var',
-      'wbr',
-      'caption',
-      'col',
-      'colgroup',
-      'table',
-      'tbody',
-      'td',
-      'tfoot',
-      'th',
-      'thead',
-      'tr',
-    ],
-    allowedAttributes: {
-      a: ['href', 'name', 'target'],
-      img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
-    },
-    selfClosing: [
-      'img',
-      'br',
-      'hr',
-      'area',
-      'base',
-      'basefont',
-      'input',
-      'link',
-      'meta',
-    ],
-    // URL schemes we permit
-    allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
-    allowedSchemesByTag: {},
-    allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
-    allowProtocolRelative: true,
-    enforceHtmlBoundary: false,
-  });
+  const sanitizeHTMLHandler = (html) => {
+    let cleanHTML = sanitizeHtml(html, {
+      allowedTags: [
+        'address',
+        'article',
+        'aside',
+        'footer',
+        'header',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'hgroup',
+        'main',
+        'nav',
+        'section',
+        'blockquote',
+        'dd',
+        'div',
+        'dl',
+        'dt',
+        'figcaption',
+        'figure',
+        'hr',
+        'li',
+        'main',
+        'ol',
+        'p',
+        'pre',
+        'ul',
+        'a',
+        'abbr',
+        'b',
+        'bdi',
+        'bdo',
+        'br',
+        'cite',
+        'code',
+        'data',
+        'dfn',
+        'em',
+        'i',
+        'kbd',
+        'mark',
+        'q',
+        'rb',
+        'rp',
+        'rt',
+        'rtc',
+        'ruby',
+        's',
+        'samp',
+        'small',
+        'span',
+        'strong',
+        'sub',
+        'sup',
+        'time',
+        'u',
+        'var',
+        'wbr',
+        'caption',
+        'col',
+        'colgroup',
+        'table',
+        'tbody',
+        'td',
+        'tfoot',
+        'th',
+        'thead',
+        'tr',
+      ],
+      allowedAttributes: {
+        a: ['href', 'name', 'target'],
+        img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading'],
+      },
+      selfClosing: [
+        'img',
+        'br',
+        'hr',
+        'area',
+        'base',
+        'basefont',
+        'input',
+        'link',
+        'meta',
+      ],
+      // URL schemes we permit
+      allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel'],
+      allowedSchemesByTag: {},
+      allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
+      allowProtocolRelative: true,
+      enforceHtmlBoundary: false,
+    });
+    return cleanHTML;
+  };
+  let cleanHTMLAbout = sanitizeHTMLHandler(profileDetails?.about);
+  let cleanHTMLExp = sanitizeHTMLHandler(htmlExp);
+  let cleanHTMLVol = sanitizeHTMLHandler(htmlVol);
 
   useEffect(() => {
     if (profileDetails) {
       setProfileDetails({
         ...profileDetails,
+        about:
+          profileDetails?.about === null ? 'Not Available' : cleanHTMLAbout,
         experience: htmlExp === null ? 'Not Available' : cleanHTMLExp,
         volunteering: htmlVol === null ? 'Not Available' : cleanHTMLVol,
       });
@@ -272,7 +185,7 @@ function App() {
   return (
     <>
       <section className="pt-5 bg-gray-100 ">
-        <div className=" bg-opacity-20 backdrop-blur-lg  drop-shadow-lg w-96 rounded-xl ">
+        <div className="  w-96 rounded-xl ">
           <div className="text-[#0A66C2] font-semibold text-center text-xl">
             LinkedIn Profile Saver
           </div>
@@ -297,12 +210,12 @@ function App() {
             <div className="px-6">
               <div className="w-full px-4 flex justify-center items-center">
                 <img
-                  alt={profileDetails?.fullname}
+                  alt={profileDetails?.fullname || 'Name Not Available'}
                   src={profileDetails?.photo || defaultImg}
                   className="shadow-xl rounded-full h-auto align-middle border-none  max-w-150-px"
                 />
               </div>
-              <div className="text-center mt-12">
+              <div className="text-center mt-5">
                 <h3 className="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">
                   {profileDetails?.fullname || 'Name Not Available'}
                 </h3>
@@ -316,22 +229,17 @@ function App() {
                 </div>
 
                 <div className="mb-2 text-gray-600 text-left rounded-xl shadow-sm  shadow-black flex flex-row justify-start items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 mr-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"
-                    />
-                  </svg>
                   <span className="p-2 ">
-                    {profileDetails?.about || 'About Section Not Available'}
+                    {profileDetails?.about ? (
+                      <div
+                        className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
+                        dangerouslySetInnerHTML={{
+                          __html: cleanHTMLAbout,
+                        }}
+                      />
+                    ) : (
+                      'About Section Not Available'
+                    )}
                   </span>
                 </div>
               </div>
@@ -346,7 +254,9 @@ function App() {
                       {htmlExp ? (
                         <div
                           className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
-                          dangerouslySetInnerHTML={{ __html: cleanHTMLExp }}
+                          dangerouslySetInnerHTML={{
+                            __html: cleanHTMLExp,
+                          }}
                         />
                       ) : (
                         'Experience Section Not Available'
@@ -365,7 +275,9 @@ function App() {
                       {htmlVol ? (
                         <div
                           className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
-                          dangerouslySetInnerHTML={{ __html: cleanHTMLVol }}
+                          dangerouslySetInnerHTML={{
+                            __html: cleanHTMLVol,
+                          }}
                         />
                       ) : (
                         'Volunteering Section Not Available'
