@@ -1,5 +1,5 @@
 const messagesFromReactAppListener = (msg, sender, sendResponse) => {
-  var _a, _b, _c, _d, _e, _f, _g;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i;
   // console.log('[content.js]. Message received', msg);
 
   const response = {
@@ -87,6 +87,25 @@ const messagesFromReactAppListener = (msg, sender, sendResponse) => {
         ? void 0
         : _g.parentElement.querySelector(' div.pvs-list__outer-container > ul')
             .innerHTML) || '',
+
+    education:
+      ((_h =
+        document === null || document === void 0
+          ? void 0
+          : document.querySelector('#education')) === null || _h === void 0
+        ? void 0
+        : _h.parentElement.querySelector(
+            ' div.pvs-list__outer-container > ul > li > div'
+          ).innerHTML) || '',
+    skills:
+      ((_i =
+        document === null || document === void 0
+          ? void 0
+          : document.querySelector('#skills')) === null || _i === void 0
+        ? void 0
+        : _i.parentElement.querySelector(
+            ' div.pvs-list__outer-container > ul > li:nth-child(1) > div'
+          ).innerHTML) || '',
 
     // volunteering:
     //   document

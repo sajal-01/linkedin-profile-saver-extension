@@ -9,12 +9,11 @@ function App() {
     photo: '',
     about: '',
     experience: '',
+    education: '',
+    skills: '',
     volunteering: '',
   });
   const [url, setUrl] = useState('');
-
-  const [htmlExp, setHtmlExp] = useState(null);
-  const [htmlVol, setHtmlVol] = useState(null);
 
   useEffect(() => {
     window.chrome?.tabs &&
@@ -50,17 +49,26 @@ function App() {
                   response === null || response === undefined
                     ? 'Not Available'
                     : response?.about,
+
+                education:
+                  response === null || response === undefined
+                    ? 'Not Available'
+                    : response?.education,
+                experience:
+                  response === null || response === undefined
+                    ? 'Not Available'
+                    : response?.experience,
+
+                skills:
+                  response === null || response === undefined
+                    ? 'Not Available'
+                    : response?.skills,
+
+                volunteering:
+                  response === null || response === undefined
+                    ? 'Not Available'
+                    : response?.volunteering,
               });
-              setHtmlExp(
-                response === null || response === undefined
-                  ? 'Not Available'
-                  : response?.experience
-              );
-              setHtmlVol(
-                response === null || response === undefined
-                  ? 'Not Available'
-                  : response?.volunteering
-              );
             }
           );
         }
@@ -165,26 +173,42 @@ function App() {
     });
     return cleanHTML;
   };
+  let cleanHTMLSkills = sanitizeHTMLHandler(profileDetails?.skills);
+  let cleanHTMLEdu = sanitizeHTMLHandler(profileDetails?.education);
   let cleanHTMLAbout = sanitizeHTMLHandler(profileDetails?.about);
-  let cleanHTMLExp = sanitizeHTMLHandler(htmlExp);
-  let cleanHTMLVol = sanitizeHTMLHandler(htmlVol);
+  let cleanHTMLExp = sanitizeHTMLHandler(profileDetails?.experience);
+  let cleanHTMLVol = sanitizeHTMLHandler(profileDetails?.volunteering);
 
   useEffect(() => {
     if (profileDetails) {
       setProfileDetails({
         ...profileDetails,
+        skills:
+          profileDetails?.skills === null ? 'Not Available' : cleanHTMLSkills,
+        education:
+          profileDetails?.education === null ? 'Not Available' : cleanHTMLEdu,
         about:
           profileDetails?.about === null ? 'Not Available' : cleanHTMLAbout,
-        experience: htmlExp === null ? 'Not Available' : cleanHTMLExp,
-        volunteering: htmlVol === null ? 'Not Available' : cleanHTMLVol,
+        experience:
+          profileDetails?.experience === null ? 'Not Available' : cleanHTMLExp,
+        volunteering:
+          profileDetails?.volunteering === null
+            ? 'Not Available'
+            : cleanHTMLVol,
       });
     }
     // console.log(profileDetails);
-  }, [htmlExp, htmlVol]);
+  }, [
+    profileDetails?.education,
+    profileDetails?.experience,
+    profileDetails?.volunteering,
+    profileDetails?.about,
+    profileDetails?.skills,
+  ]);
 
   return (
     <>
-      <section className="pt-5 bg-gray-100 ">
+      <section className="pt-4 bg-gray-100 ">
         <div className="  w-96 rounded-xl ">
           <div className="text-[#0A66C2] font-semibold text-center text-xl">
             LinkedIn Profile Saver
@@ -210,21 +234,22 @@ function App() {
             <div className="px-6">
               <div className="w-full px-4 flex justify-center items-center">
                 <img
-                  alt={profileDetails?.fullname || 'Name Not Available'}
+                  alt={profileDetails?.fullname || '<--Name Not Available-->'}
                   src={profileDetails?.photo || defaultImg}
                   className="shadow-xl rounded-full h-auto align-middle border-none  max-w-150-px"
                 />
               </div>
               <div className="text-center mt-5">
                 <h3 className="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">
-                  {profileDetails?.fullname || 'Name Not Available'}
+                  {profileDetails?.fullname || '<--Name Not Available-->'}
                 </h3>
                 {/* JOB TITLE | LOCATION*/}
                 <div className="mb-2 font-medium text-md text-blueGray-600 flex items-center justify-start ">
                   <span className="mr-2">
                     🏢
-                    {profileDetails?.title || 'Title Not Available'} 📍{' '}
-                    {profileDetails?.location || 'Location Not Available'}{' '}
+                    {profileDetails?.title ||
+                      '<--Title Not Available-->'} 📍{' '}
+                    {profileDetails?.location || '<--Location Not Available-->'}{' '}
                   </span>
                 </div>
 
@@ -238,7 +263,7 @@ function App() {
                         }}
                       />
                     ) : (
-                      'About Section Not Available'
+                      '<--About Section Not Available-->'
                     )}
                   </span>
                 </div>
@@ -251,7 +276,7 @@ function App() {
                 <div className="flex flex-wrap justify-start">
                   <div className="w-full  px-4">
                     <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                      {htmlExp ? (
+                      {profileDetails?.experience ? (
                         <div
                           className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
                           dangerouslySetInnerHTML={{
@@ -259,7 +284,49 @@ function App() {
                           }}
                         />
                       ) : (
-                        'Experience Section Not Available'
+                        '<--Experience Section Not Available-->'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10 py-10 border-t border-blueGray-200 text-left">
+                <div className="text-center font-bold text-blueGray-700 text-xl">
+                  Skills
+                </div>
+                <div className="flex flex-wrap justify-start">
+                  <div className="w-full  px-4">
+                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                      {profileDetails?.skills ? (
+                        <div
+                          className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
+                          dangerouslySetInnerHTML={{
+                            __html: cleanHTMLSkills,
+                          }}
+                        />
+                      ) : (
+                        '<--Skills Section Not Available-->'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10 py-10 border-t border-blueGray-200 text-left">
+                <div className="text-center font-bold text-blueGray-700 text-xl">
+                  Education
+                </div>
+                <div className="flex flex-wrap justify-start">
+                  <div className="w-full  px-4">
+                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                      {profileDetails?.education ? (
+                        <div
+                          className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
+                          dangerouslySetInnerHTML={{
+                            __html: cleanHTMLEdu,
+                          }}
+                        />
+                      ) : (
+                        '<--Education Section Not Available-->'
                       )}
                     </p>
                   </div>
@@ -272,7 +339,7 @@ function App() {
                 <div className="flex flex-wrap justify-start">
                   <div className="w-full  px-4">
                     <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                      {htmlVol ? (
+                      {profileDetails?.volunteering ? (
                         <div
                           className="text-left text-gray-700 text-sm font-light leading-relaxed tracking-wide"
                           dangerouslySetInnerHTML={{
@@ -280,7 +347,7 @@ function App() {
                           }}
                         />
                       ) : (
-                        'Volunteering Section Not Available'
+                        '<--Volunteering Section Not Available-->'
                       )}
                     </p>
                   </div>
